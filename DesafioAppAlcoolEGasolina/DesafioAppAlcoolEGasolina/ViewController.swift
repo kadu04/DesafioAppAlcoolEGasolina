@@ -30,6 +30,7 @@ class ViewController: UIViewController {
     }
     
     func configFontsEndColors() {
+        view.backgroundColor = .systemGreen
         //logoImageView.image = UIImage(named: ")
         ethanolPriceLabel.text = "Preço Álcool"
         gasPriceLabel.text = "Preço Gasolina"
@@ -44,9 +45,13 @@ class ViewController: UIViewController {
         gasPriceTextField.delegate = self
         ethanolPriceTextField.delegate = self
         
+        gasPriceTextField.keyboardType = .decimalPad
+        ethanolPriceTextField.keyboardType = .decimalPad
+        
         calculateButton.setTitle("Calcular", for: .normal)
         calculateButton.setTitleColor(.white, for: .normal)
         calculateButton.backgroundColor = .blue
+        
         resultLabel.text = "Digite os preços!"
         resultLabel.textColor = .white
         resultLabel.backgroundColor = .blue
@@ -56,8 +61,16 @@ class ViewController: UIViewController {
 
     }
      
-
     @IBAction func tappedCalculateButton(_ sender: UIButton) {
+        let ethanolPrice: Double = Double(ethanolPriceTextField.text ?? "0.0") ?? 0.0
+        let gasPrice: Double = Double(gasPriceTextField.text ?? "0.0") ?? 0.0
+
+        if ethanolPrice / gasPrice > 0.7 {
+            resultLabel.text = "Melhor utilizar Gasolina"
+        } else {
+            resultLabel.text = "Melhor utilizar Álcool"
+
+        }
     }
     
 }
@@ -66,15 +79,23 @@ class ViewController: UIViewController {
 
 extension ViewController: UITextFieldDelegate {
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    //removido pq não tem necessidade de usar.
+    //func textFieldDidBeginEditing(_ textField: UITextField) {
         
-    }
+    //}
     
     func textFieldDidEndEditing(_ textField: UITextField) {
+        
+        if ethanolPriceTextField.text == "" || gasPriceTextField.text == "" {
+            calculateButton.isEnabled = false
+        } else {
+            calculateButton.isEnabled = true
+        }
         
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
         return true
     }
     
